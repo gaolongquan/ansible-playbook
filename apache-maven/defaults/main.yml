@@ -1,0 +1,6 @@
+---
+
+maven_archive_package: "apache-maven-3.5.3-bin.tar.gz"
+maven_unarchive_dir_name: "apache-maven-3.5.3"
+maven_unarchive_path: "/usr/local"
+MAVEN_HOME: "/usr/local/apache-maven"

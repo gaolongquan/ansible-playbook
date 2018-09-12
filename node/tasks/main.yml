@@ -1,0 +1,32 @@
+---
+
+- name: copy node package
+  copy: src={{node_archive_package}} dest=/tmp/ mode=0755
+  tags:
+    - install
+
+- name: unarchive node package
+  unarchive: src=/tmp/{{node_archive_package}} dest={{node_unarchive_path}} copy=no
+  tags:
+    - install
+
+- name: create link node
+  file: src={{node_unarchive_path}}/{{node_unarchive_dir_name}} dest={{NODE_HOME}} state=link
+  when: node_unarchive_path is defined and node_unarchive_dir_name is defined
+  tags:
+    - install
+
+- name: create link bin/node
+  file: src={{NODE_HOME}}/bin/node dest=/usr/bin/node state=link owner=root group=root
+  tags:
+    - install
+
+- name: create link bin/npm
+  file: src={{NODE_HOME}}/bin/npm dest=/usr/bin/npm state=link owner=root group=root
+  tags:
+    - install
+
+- name: create node env variable on /etc/profile.d/
+  template: src=node.sh.j2 dest=/etc/profile.d/node.sh
+  tags:
+    - install

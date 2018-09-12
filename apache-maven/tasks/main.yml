@@ -1,0 +1,29 @@
+---
+
+- name: copy maven package
+  copy: src={{maven_archive_package}} dest=/tmp/ mode=0755
+  tags:
+    - copy
+    - install
+
+- name: unarchive maven package
+  unarchive: src=/tmp/{{maven_archive_package}} dest={{maven_unarchive_path}} copy=no
+  tags:
+    - install
+
+- name: create link maven
+  file: src={{maven_unarchive_path}}/{{maven_unarchive_dir_name}} dest={{MAVEN_HOME}} state=link
+  when: maven_unarchive_path is defined and maven_unarchive_dir_name is defined
+  tags:
+    - install
+
+- name: create link bin/mvn
+  file: src={{MAVEN_HOME}}/bin/mvn dest=/usr/bin/mvn state=link owner=root group=root
+  tags:
+    - softlink
+    - install
+
+- name: create maven env variable on /etc/profile.d/
+  template: src=maven.sh.j2 dest=/etc/profile.d/maven.sh
+  tags:
+    - install

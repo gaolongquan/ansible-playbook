@@ -1,0 +1,8 @@
+---
+
+- name: "Playbook for node"
+  hosts: "{{hosts_group}}"
+  become: yes
+  become_user: root
+  roles:
+    - {role: node}

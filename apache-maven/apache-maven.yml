@@ -1,0 +1,8 @@
+---
+
+- name: "Playbook for apache-maven"
+  hosts: "{{hosts_group}}"
+  become: yes
+  become_user: root
+  roles:
+    - {role: apache-maven}

@@ -1,0 +1,6 @@
+---
+
+node_archive_package: "node-v8.9.4-linux-x64.tar.xz"
+node_unarchive_dir_name: "node-v8.9.4-linux-x64"
+node_unarchive_path: "/usr/local"
+NODE_HOME: "/usr/local/node"
