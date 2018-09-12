@@ -1,0 +1,6 @@
+---
+
+jdk_archive_package: "jdk-8u171-linux-x64.tar.gz"
+jdk_unarchive_dir_name: "jdk1.8.0_171"
+jdk_unarchive_path: "/usr/local"
+JAVA_HOME: "/usr/local/java"

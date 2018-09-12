@@ -1,0 +1,32 @@
+---
+
+- name: copy jdk package
+  copy: src={{jdk_archive_package}} dest=/tmp/ mode=0755
+  tags:
+    - jdk
+    - install
+
+- name: unarchive jdk package
+  unarchive: src=/tmp/{{jdk_archive_package}} dest={{jdk_unarchive_path}} copy=no
+  tags:
+    - jdk
+    - install
+
+- name: create link jdk
+  file: src={{jdk_unarchive_path}}/{{jdk_unarchive_dir_name}} dest={{JAVA_HOME}} state=link
+  when: jdk_unarchive_path is defined and jdk_unarchive_dir_name is defined
+  tags:
+    - jdk
+    - install
+
+- name: create link bin/java
+  file: src={{JAVA_HOME}}/bin/java dest=/usr/bin/java state=link owner=root group=root
+  tags:
+    - jdk
+    - install
+
+- name: create jdk env variable on /etc/profile.d/
+  template: src=jdk.sh.j2 dest=/etc/profile.d/java.sh
+  tags:
+    - jdk
+    - install
