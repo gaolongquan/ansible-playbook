@@ -1,0 +1,31 @@
+---  
+  - name:  CentOS6 system copy zabbix-agent rpm
+    copy: src=/usr/software/zabbix-agent-4.0.5-1.el6.x86_64.rpm  dest=/tmp/zabbix-agent-4.0.5-1.el6.x86_64.rpm
+    when:
+      - ansible_distribution == "CentOS"
+      - ansible_distribution_major_version == "6" 
+  - name:  CentOS7 system copy zabbix-agent rpm
+    copy: src=/usr/software/zabbix-agent-4.0.5-1.el7.x86_64.rpm  dest=/tmp/zabbix-agent-4.0.5-1.el7.x86_64.rpm
+    when:
+      - ansible_distribution == "CentOS"
+      - ansible_distribution_major_version == "7"
+  - name: yum localinstall zabbix-agent
+    shell: cd /tmp;yum -y localinstall zabbix-agent-*.rpm
+  - name: rm zabbix-agent
+    shell: cd /tmp;rm -f zabbix-agent-*.rpm
+  - name: zabbix agent config file.
+    replace: path={{ zabbix_agent_conf_path }}/zabbix_agentd.conf regexp={{ item.r }} replace={{ item.s }}
+    with_items:
+     - { r: "127.0.0.1", s: "{{ zabbix_agent_server_host }}"}
+     - { r: "Hostname=Zabbix server", s: "Hostname={{ zabbix_agent_hostname }}"}
+     - { r: "# HostMetadata=", s: "HostMetadata=zabbix.lds"}
+  - name: CentOS6 system start zabbix
+    shell: /etc/init.d/zabbix-agent start;chkconfig zabbix-agent on
+    when:
+      - ansible_distribution == "CentOS"
+      - ansible_distribution_major_version == "6"
+  - name: CentOS7 system start zabbix
+    shell: systemctl start zabbix-agent.service ; systemctl enable zabbix-agent.service
+    when:
+      - ansible_distribution == "CentOS"
+      - ansible_distribution_major_version == "7"
